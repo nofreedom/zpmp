@@ -29,11 +29,19 @@ chip = [ [1,1,0,1,1,0,0,1,1,1,0,0,0,0,1,1,0,1,0,1,0,0,1,0,0,0,1,0,1,1,1,0],
        ]
 
 def baseband_wave(x_axis):
-    half_sine_wave = np.sin(x_axis*2*pi/number_sample_per_chip)
+    half_sine_wave = np.sin(x_axis*pi/number_sample_per_chip)
     return half_sine_wave
 
+def dsss_modulate(data):
+    r = []
+    for i in range(32):
+        if chip[data][i]:
+            r.append(baseband_wave(x_axis))
+        else:
+            r.append((-1)*baseband_wave(x_axis))
+    return np.concatenate(r)
+
 #plt.plot(x_axis,baseband_wave(x_axis))
-#plt.show()
 
 #x_axis = range(0,16)
 #r = np.zeros((16,16))
@@ -41,3 +49,8 @@ def baseband_wave(x_axis):
 #    for j in range(0,16):
 #        r[i][j] = np.correlate(chip[i], chip[j])
 #    print "%r\n"%r[i]
+
+r = dsss_modulate(0)
+#plt.figure()
+#plt.plot(range(len(r)), r, linestyle='dashed', marker='o')
+#plt.show()
